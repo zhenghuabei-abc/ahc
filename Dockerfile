@@ -1,5 +1,5 @@
 # base image
-FROM registry.cn-hangzhou.aliyuncs.com/fn-ai/node-arm64:20-alpine3.20 AS base
+FROM node:20-alpine3.20 AS base
 LABEL maintainer="takatost@gmail.com"
 
 # if you located in China, you can use aliyun mirror to speed up
@@ -19,7 +19,7 @@ COPY yarn.lock .
 # if you located in China, you can use taobao registry to speed up
 # RUN yarn install --frozen-lockfile --registry https://registry.npmmirror.com/
 
-RUN yarn install --registry https://mirrors.cloud.tencent.com/npm/
+RUN yarn install
 
 # build resources
 FROM base AS builder
@@ -27,7 +27,7 @@ WORKDIR /app/web
 COPY --from=packages /app/web/ .
 COPY . .
 
-RUN yarn build 
+RUN yarn build
 
 
 # production stage
